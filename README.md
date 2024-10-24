@@ -1,6 +1,3 @@
-# Create a README.md file content
-readme_content = """# Rule Engine with AST
-
 ## Overview
 The Rule Engine with AST is a 3-tier application designed to determine user eligibility based on attributes such as age, department, income, and spend. The application utilizes an Abstract Syntax Tree (AST) to represent conditional rules and allows for dynamic creation, combination, and modification of these rules.
 
@@ -12,6 +9,130 @@ The Rule Engine with AST is a 3-tier application designed to determine user elig
 - **Lombok**: For reducing boilerplate code in Java classes
 - **Liquibase**: For managing database migrations
 - **React**: For the frontend user interface
+
+- # Rule Engine API Documentation
+
+This documentation provides details on the Rule Engine backend functionality, including how to create, combine, and evaluate rules using RESTful APIs.
+
+## Endpoints
+
+### 1. Create Rule
+**Endpoint:** `POST /rules/create_rule`
+
+**Description:** This endpoint creates a new rule based on a specified rule string.
+
+**Request Body:**
+```json
+{
+  "ruleString": "(age > 30 AND income < 60000)"
+}
+
+Response Example:
+
+{
+  "id": "1",
+  "name": "Rule_123e4567-e89b-12d3-a456-426614174000",
+  "ruleString": "(age > 30 AND income < 60000)",
+  "astJson": "{...}",
+  "createdAt": "2024-10-20T12:34:56",
+  "updatedAt": "2024-10-20T12:34:56"
+}
+
+2. Combine Rules
+Endpoint: POST /rules/combine_rules
+
+Description: Combines two or more existing rules into a single, composite rule.
+
+Request Body:
+
+{
+  "ruleIds": [1,2]
+}
+
+Response Example:
+
+{
+  "id": "323e4567-e89b-12d3-a456-426614174002",
+  "name": "CombinedRule_323e4567-e89b-12d3-a456-426614174002",
+  "ruleString": "(age > 30 AND income < 60000) OR (age < 25 AND income > 70000)",
+  "astJson": "{...}",
+  "createdAt": "2024-10-20T12:45:00",
+  "updatedAt": "2024-10-20T12:45:00"
+}
+
+3. Evaluate Rule
+Endpoint: POST /rules/{id}/evaluate_rule
+
+Description: Evaluates a rule against provided data to determine if the conditions are met.
+
+Path Parameter:
+
+id - The Long of the rule to be evaluated.
+Request Body Example:
+
+{
+  "age": 35,
+  "income": 50000,
+  "experience": 8,
+  "department": "Engineering"
+}
+
+{
+  "result": true
+}
+
+Usage Examples
+Creating Individual Rules
+Example Rule 1:
+
+json
+Copy code
+{
+  "ruleString": "((age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing')) AND (salary > 50000 OR experience > 5)"
+}
+Example Rule 2:
+
+json
+Copy code
+{
+  "ruleString": "(age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5)"
+}
+Combining Rules
+To create a composite rule, you can combine the above two rules using their UUIDs:
+
+Request Body:
+
+
+{
+  "ruleIds": [1,2]
+}
+Response Example:
+
+{
+  "id": "323e4567-e89b-12d3-a456-426614174002",
+  "name": "CombinedRule_323e4567-e89b-12d3-a456-426614174002",
+  "ruleString": "(Combined Rule String)",
+  "astJson": "{...}",
+  "createdAt": "2024-10-20T12:45:00",
+  "updatedAt": "2024-10-20T12:45:00"
+}
+Evaluating a Combined Rule
+To check if the data meets the conditions of a rule, use the evaluate_rule endpoint with the rule ID.
+
+Request Example:
+
+{
+  "age": 35,
+  "department": "Sales",
+  "salary": 60000,
+  "experience": 3
+}
+Response Example:
+
+{
+  "result": true
+}
+
 
 ## Features
 - Create, combine, and evaluate rules using a user-friendly interface.
