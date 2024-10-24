@@ -141,8 +141,6 @@ Response Example:
 - Database migrations managed via Liquibase.
 
 ## Project Structure
-
-## Project Structure
 ```
 /rule-engine
 |-- /src
